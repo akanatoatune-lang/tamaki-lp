@@ -99,6 +99,32 @@ export default function ScrollEffects() {
       );
     };
 
+    const anchorLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
+    );
+    const onAnchorClick = (event: MouseEvent) => {
+      const link = event.currentTarget as HTMLAnchorElement;
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') {
+        return;
+      }
+
+      const target = document.querySelector<HTMLElement>(hash);
+      if (!target) {
+        return;
+      }
+
+      event.preventDefault();
+      if (scrollStart && target.offsetTop >= scrollStart.offsetTop) {
+        scroller.classList.add('is-free-scroll');
+      }
+      scroller.scrollTo({
+        top: target.offsetTop,
+        behavior: 'smooth',
+      });
+      window.history.replaceState(null, '', hash);
+    };
+
     update();
     const videoCleanups = videos.map((video) => {
       const start = Number(video.dataset.loopStart);
@@ -128,12 +154,18 @@ export default function ScrollEffects() {
     });
     scroller.addEventListener('scroll', schedule, { passive: true });
     wrapper.addEventListener('pointermove', onPointerMove, { passive: true });
+    anchorLinks.forEach((link) => {
+      link.addEventListener('click', onAnchorClick);
+    });
 
     return () => {
       observer.disconnect();
       videoCleanups.forEach((cleanup) => cleanup());
       scroller.removeEventListener('scroll', schedule);
       wrapper.removeEventListener('pointermove', onPointerMove);
+      anchorLinks.forEach((link) => {
+        link.removeEventListener('click', onAnchorClick);
+      });
       if (frame) {
         window.cancelAnimationFrame(frame);
       }
