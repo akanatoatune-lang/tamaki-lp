@@ -1,4 +1,4 @@
-import { cp, copyFile, mkdir } from 'node:fs/promises';
+import { cp, copyFile, mkdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 
@@ -11,7 +11,6 @@ if (!existsSync(clientDir) || !existsSync(serverDir)) {
 }
 
 await mkdir(clientDir, { recursive: true });
-await copyFile(path.join(serverDir, 'index.js'), path.join(clientDir, '_worker.js'));
 await copyFile(path.join(serverDir, 'index.js'), path.join(clientDir, 'index.js'));
 
 const entriesToCopy = [
@@ -35,3 +34,27 @@ for (const entry of entriesToCopy) {
     force: true,
   });
 }
+
+await cp(path.join(clientDir, '_next'), path.join(clientDir, 'assets', '_next'), {
+  recursive: true,
+  force: true,
+});
+
+await writeFile(
+  path.join(clientDir, '_worker.js'),
+  `import app from './index.js';
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    if (url.pathname.startsWith('/_next/static/')) {
+      url.pathname = '/assets' + url.pathname;
+      return env.ASSETS.fetch(new Request(url, request));
+    }
+
+    return app.fetch(request, env, ctx);
+  },
+};
+`,
+);
