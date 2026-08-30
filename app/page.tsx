@@ -107,7 +107,7 @@ export default function Home() {
                 loop
                 playsInline
                 preload="metadata"
-                src="/videos/main-visual.mov"
+                src="/videos/main-visual.mp4"
                 data-loop-start="0.2"
                 data-loop-end="15"
               />

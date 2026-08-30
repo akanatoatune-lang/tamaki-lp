@@ -320,17 +320,41 @@ textarea {
 }
 
 .hero {
-  justify-content: flex-end;
+  justify-content: flex-start;
+  padding-top: var(--header);
   padding-right: 0;
   padding-left: 0;
-  background: var(--paper);
+  background:
+    linear-gradient(122deg, transparent 0 31%, rgba(246, 196, 67, 0.3) 31% 32%, transparent 32% 100%),
+    linear-gradient(62deg, transparent 0 56%, rgba(31, 61, 80, 0.08) 56% 57%, transparent 57% 100%),
+    linear-gradient(rgba(31, 61, 80, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 61, 80, 0.07) 1px, transparent 1px),
+    var(--white);
+  background-size: auto, auto, 42px 42px, 42px 42px, auto;
 }
 
 .hero-photo {
   position: absolute;
   inset: var(--header) 0 0;
   z-index: -2;
-  background: url('/images/tamaki-electric-hero.png') center / cover no-repeat;
+  background: url('/images/tamaki-electric-hero.png') center bottom / cover no-repeat;
+  opacity: 0.76;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.08) 22%, rgba(0, 0, 0, 0.74) 42%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.08) 22%, rgba(0, 0, 0, 0.74) 42%, #000 100%);
+}
+
+.hero::before {
+  content: 'TAMAKI';
+  position: absolute;
+  top: calc(var(--header) + 3dvh);
+  right: -0.18em;
+  z-index: -1;
+  color: rgba(31, 61, 80, 0.1);
+  font-family: var(--font-geist-mono), Arial, sans-serif;
+  font-size: clamp(58px, 22cqw, 108px);
+  font-weight: 900;
+  line-height: 0.86;
+  writing-mode: vertical-rl;
 }
 
 .hero::after {
@@ -338,11 +362,17 @@ textarea {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(251, 250, 246, 0.06) 18%, rgba(17, 17, 17, 0.12) 48%, rgba(17, 17, 17, 0.86) 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 232, 221, 0.9) 31%, rgba(31, 61, 80, 0.44) 54%, rgba(17, 17, 17, 0.84) 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.64), transparent 42%, rgba(31, 61, 80, 0.16));
 }
 
 .hero-copy {
-  padding: 0 6cqw 74px;
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  color: var(--blue);
+  padding: clamp(10px, 2dvh, 18px) 6cqw 76px;
 }
 
 .chapter {
@@ -413,6 +443,7 @@ textarea {
 .hero-copy > p:not(.chapter) {
   max-width: 86%;
   margin-top: 18px;
+  color: var(--blue);
   font-size: clamp(14px, 3.7cqw, 17px);
   font-weight: 800;
   line-height: 1.8;
