@@ -70,7 +70,7 @@ export default function ScrollEffects() {
         '--page-progress',
         String(nearest / Math.max(sections.length - 1, 1)),
       );
-      if (scrollStart) {
+      if (scrollStart && scroller.dataset.forceFreeScroll !== 'true') {
         const freeScrollStart = scrollStart.offsetTop - scroller.clientHeight - 4;
         scroller.classList.toggle(
           'is-free-scroll',
@@ -116,7 +116,10 @@ export default function ScrollEffects() {
 
       event.preventDefault();
       if (scrollStart && target.offsetTop >= scrollStart.offsetTop) {
+        scroller.dataset.forceFreeScroll = 'true';
         scroller.classList.add('is-free-scroll');
+      } else {
+        delete scroller.dataset.forceFreeScroll;
       }
       scroller.scrollTo({
         top: target.offsetTop,
