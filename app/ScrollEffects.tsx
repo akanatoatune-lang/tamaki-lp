@@ -12,7 +12,6 @@ export default function ScrollEffects() {
   useEffect(() => {
     const scroller = document.querySelector<HTMLElement>('.lp-content');
     const wrapper = document.querySelector<HTMLElement>('.site-wrapper');
-    const scrollStart = document.querySelector<HTMLElement>('#requirements');
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>('.swipe-section, .scroll-section'),
     );
@@ -70,13 +69,6 @@ export default function ScrollEffects() {
         '--page-progress',
         String(nearest / Math.max(sections.length - 1, 1)),
       );
-      if (scrollStart && scroller.dataset.forceFreeScroll !== 'true') {
-        const freeScrollStart = scrollStart.offsetTop - scroller.clientHeight - 4;
-        scroller.classList.toggle(
-          'is-free-scroll',
-          scroller.scrollTop >= freeScrollStart,
-        );
-      }
       setCurrent(nearest + 1);
     };
 
@@ -102,9 +94,7 @@ export default function ScrollEffects() {
     const anchorLinks = Array.from(
       document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'),
     );
-    const onAnchorClick = (event: MouseEvent) => {
-      const link = event.currentTarget as HTMLAnchorElement;
-      const hash = link.getAttribute('href');
+    const scrollToHash = (hash: string, behavior: ScrollBehavior) => {
       if (!hash || hash === '#') {
         return;
       }
@@ -114,18 +104,34 @@ export default function ScrollEffects() {
         return;
       }
 
-      event.preventDefault();
-      if (scrollStart && target.offsetTop >= scrollStart.offsetTop) {
-        scroller.dataset.forceFreeScroll = 'true';
-        scroller.classList.add('is-free-scroll');
-      } else {
-        delete scroller.dataset.forceFreeScroll;
-      }
+      const snapTarget =
+        target.matches('.swipe-section, .scroll-section')
+          ? target
+          : target.closest<HTMLElement>('.swipe-section, .scroll-section') ?? target;
+      const top =
+        snapTarget.getBoundingClientRect().top -
+        scroller.getBoundingClientRect().top +
+        scroller.scrollTop;
       scroller.scrollTo({
-        top: target.offsetTop,
-        behavior: 'smooth',
+        top,
+        behavior,
       });
+    };
+
+    const onAnchorClick = (event: MouseEvent) => {
+      const link = event.currentTarget as HTMLAnchorElement;
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') {
+        return;
+      }
+
+      event.preventDefault();
+      scrollToHash(hash, 'smooth');
       window.history.replaceState(null, '', hash);
+    };
+
+    const onHashChange = () => {
+      scrollToHash(window.location.hash, 'auto');
     };
 
     update();
@@ -157,8 +163,12 @@ export default function ScrollEffects() {
     });
     scroller.addEventListener('scroll', schedule, { passive: true });
     wrapper.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('hashchange', onHashChange);
     anchorLinks.forEach((link) => {
       link.addEventListener('click', onAnchorClick);
+    });
+    window.requestAnimationFrame(() => {
+      scrollToHash(window.location.hash, 'auto');
     });
 
     return () => {
@@ -166,6 +176,7 @@ export default function ScrollEffects() {
       videoCleanups.forEach((cleanup) => cleanup());
       scroller.removeEventListener('scroll', schedule);
       wrapper.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('hashchange', onHashChange);
       anchorLinks.forEach((link) => {
         link.removeEventListener('click', onAnchorClick);
       });

@@ -11,6 +11,7 @@ const storySlides = [
     body: [
       '未経験から追いつくのは難しい。成功するには、多くの人を蹴落とさなければいけない。',
       'そんなふうに思っていませんか。',
+      '弊社があなたに求めているのは圧倒的な実力でも、光り輝くセンスでもありません。',
     ],
   },
   {
@@ -32,9 +33,12 @@ const storySlides = [
     image: '/images/generated/routes-blue-v2.webp',
     imageClass: 'visual-routes',
     points: ['独立', '承継', '選べる未来'],
+    routes: [
+      ['独立', '戦い続け勝利をその手に掴み取る方法。'],
+      ['継承', '戦わずして勝つ、さながら無血開城のような方法。'],
+    ],
     body: [
-      '戦い続け勝利をその手に掴み取る方法。',
-      '戦わずして勝つ、さながら無血開城のような方法。',
+      '自分のスタイルや考え方によって進む道を決めることができます。',
     ],
   },
   {
@@ -52,6 +56,7 @@ const storySlides = [
     body: [
       '社員の独立を推奨しています。',
       '技術はもちろん、経営に関する相談もいつでもできます。',
+      '当社で身につけた技術と人脈での独立を目指します！',
     ],
   },
   {
@@ -62,8 +67,9 @@ const storySlides = [
     imageClass: 'visual-succession',
     points: ['少数精鋭', '派閥なし', '会社を継ぐ道'],
     body: [
-      '社内で実力をつけ、代表に認められ、立場を上げていく道もあります。',
-      '少数精鋭だから、派閥争いではなく成長に集中できます。',
+      '社内で実力をつけ代表に認められ、社内で立場を上げていく道もあります。',
+      '少数精鋭だからこそ無駄な派閥争いなどはなく、自身の成長に注力できます。',
+      'また、実力と人望の両方を兼ね備えれば、会社を継ぐという道も？',
     ],
   },
 ];
@@ -176,6 +182,16 @@ export default function Home() {
                   </ul>
                 </div>
               )}
+              {slide.routes && (
+                <div className="route-contrast">
+                  {slide.routes.map(([label, text]) => (
+                    <div key={label}>
+                      <h3>{label}</h3>
+                      <p>{text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="story-body">
                 {slide.body.map((text) => (
                   <p key={text}>{text}</p>
@@ -188,89 +204,92 @@ export default function Home() {
           ))}
 
           <section className="swipe-section company-slide dark" aria-labelledby="company-title">
-            <p className="chapter">06 / COMPANY</p>
-            <h2 className="line-title" id="company-title">
-              <span>会社情報</span>
-              <small>COMPANY PROFILE</small>
-            </h2>
-            <p className="company-catch">
-              流山から、信頼でつながる電気工事を。
-            </p>
-            <dl className="data-list">
-              <div>
-                <dt>会社名</dt>
-                <dd>タマキ電気工業株式会社</dd>
-              </div>
-              <div>
-                <dt>代表取締役</dt>
-                <dd>玉城 征治</dd>
-              </div>
-              <div>
-                <dt>本社</dt>
-                <dd>〒270-0113 千葉県流山市駒木台219-3</dd>
-              </div>
-              <div>
-                <dt>事業内容</dt>
-                <dd>照明設備工事 / 引き込み工事</dd>
-              </div>
-              <div>
-                <dt>採用職種</dt>
-                <dd>電気工事士 / 正社員</dd>
-              </div>
-            </dl>
-            <div className="company-message">
-              <h3>人柄を見て、任せる会社です。</h3>
-              <p>
-                少数精鋭だからこそ、日々の姿勢や信頼関係がそのまま評価につながります。
-                技術は入社後に磨きながら、独立も承継も目指せます。
+            <div className="section-scroll">
+              <p className="chapter">06 / COMPANY</p>
+              <h2 className="line-title" id="company-title">
+                <span>会社情報</span>
+                <small>COMPANY PROFILE</small>
+              </h2>
+              <p className="company-catch">
+                流山から、信頼でつながる電気工事を。
               </p>
+              <dl className="data-list">
+                <div>
+                  <dt>会社名</dt>
+                  <dd>タマキ電気工業株式会社</dd>
+                </div>
+                <div>
+                  <dt>代表取締役</dt>
+                  <dd>玉城 征治</dd>
+                </div>
+                <div>
+                  <dt>本社</dt>
+                  <dd>〒270-0113 千葉県流山市駒木台219-3</dd>
+                </div>
+                <div>
+                  <dt>事業内容</dt>
+                  <dd>照明設備工事 / 引き込み工事</dd>
+                </div>
+                <div>
+                  <dt>採用職種</dt>
+                  <dd>電気工事士 / 正社員</dd>
+                </div>
+              </dl>
+              <div className="company-message">
+                <h3>人柄を見て、任せる会社です。</h3>
+                <p>
+                  少数精鋭だからこそ、日々の姿勢や信頼関係がそのまま評価につながります。
+                  技術は入社後に磨きながら、独立も承継も目指せます。
+                </p>
+              </div>
             </div>
           </section>
 
-          <section className="scroll-section requirements" id="requirements" aria-labelledby="requirements-title">
-            <p className="chapter dark-text">07 / JOB DESCRIPTION</p>
-            <h2 className="line-title blue" id="requirements-title">
-              <span>募集要項</span>
-              <small>BASIC</small>
-            </h2>
-            <dl className="data-list job-data">
-              {requirements.map(([term, desc]) => (
-                <div key={term}>
-                  <dt>{term}</dt>
-                  <dd>{desc}</dd>
-                </div>
-              ))}
-            </dl>
+          <section className="swipe-section requirements" id="requirements" aria-labelledby="requirements-title">
+            <div className="section-scroll">
+              <p className="chapter dark-text">07 / JOB DESCRIPTION</p>
+              <h2 className="line-title blue" id="requirements-title">
+                <span>募集要項</span>
+                <small>BASIC</small>
+              </h2>
+              <dl className="data-list job-data">
+                {requirements.map(([term, desc]) => (
+                  <div key={term}>
+                    <dt>{term}</dt>
+                    <dd>{desc}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </section>
 
-          <section className="scroll-section entry" id="entry" aria-labelledby="entry-title">
-            <p className="chapter">08 / CONTACT</p>
-            <h2 id="entry-title">
-              <span>勝つための一歩は</span>
-              <span>ここから</span>
-            </h2>
-            <p className="entry-lead">
-              応募フォームはWordPress実装時に接続予定です。初稿では配置確認用として表示しています。
-            </p>
-            <form className="contact-form">
-              <label>
-                <span>お名前 <b>必須</b></span>
-                <input type="text" name="name" autoComplete="name" />
-              </label>
-              <label>
-                <span>メールアドレス <b>必須</b></span>
-                <input type="email" name="email" autoComplete="email" />
-              </label>
-              <label>
-                <span>電話番号</span>
-                <input type="tel" name="tel" autoComplete="tel" />
-              </label>
-              <label>
-                <span>応募・お問い合わせ内容 <b>必須</b></span>
-                <textarea name="message" rows={4} />
-              </label>
-              <button type="button">送信する</button>
-            </form>
+          <section className="swipe-section entry" id="entry" aria-labelledby="entry-title">
+            <div className="section-scroll">
+              <p className="chapter">08 / CONTACT</p>
+              <h2 id="entry-title">
+                <span>勝つための一歩は</span>
+                <span>ここから</span>
+              </h2>
+              <form className="contact-form">
+                <label>
+                  <span>お名前 <b>必須</b></span>
+                  <input type="text" name="name" autoComplete="name" />
+                </label>
+                <label>
+                  <span>メールアドレス <b>必須</b></span>
+                  <input type="email" name="email" autoComplete="email" />
+                </label>
+                <label>
+                  <span>電話番号</span>
+                  <input type="tel" name="tel" autoComplete="tel" />
+                </label>
+                <label>
+                  <span>応募・お問い合わせ内容 <b>必須</b></span>
+                  <textarea name="message" rows={4} />
+                </label>
+                <button type="button">送信する</button>
+              </form>
+            </div>
           </section>
         </main>
       </div>
