@@ -12,6 +12,7 @@ if (!existsSync(clientDir) || !existsSync(serverDir)) {
 
 await mkdir(clientDir, { recursive: true });
 await copyFile(path.join(serverDir, 'index.js'), path.join(clientDir, '_worker.js'));
+await copyFile(path.join(serverDir, 'index.js'), path.join(clientDir, 'index.js'));
 
 const entriesToCopy = [
   '_next',
